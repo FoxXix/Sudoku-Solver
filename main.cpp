@@ -6,74 +6,76 @@ using namespace std;
 
 const int N {9};
 
-bool isValidInRow(int grid[N][N], int& row, int& value)
+bool isValidInRow(int grid[N][N], int& row_index, int& value)
 {
     /**
      * Find if the given value at the specified row is not found.
      *
-     * @param grid  Container of current grid state
-     * @param row   Row index.
-     * @param value Value to check row with.
-     * @return if value is able to be placed in row index.
+     * @param grid      Container of current grid state
+     * @param row_index Row index.
+     * @param value     Value to check row with.
+     * @return          bool; if value is able to be placed in row index.
      */
 
     for (int col_index = 0; col_index < N; col_index++)
-        if (grid[row][col_index] == value)
+        if (grid[row_index][col_index] == value)
             return false;
     return true;
 }
 
-bool isValidInCol(int grid[N][N], int& col, int& value)
+bool isValidInCol(int grid[N][N], int& col_index, int& value)
 {
     /**
      * Find if the given value at the specified column is not found.
      *
-     * @param grid  Container of current grid state
-     * @param col   Column index.
-     * @param value Value to check column with.
-     * @return if value is able to be placed in column index.
+     * @param grid      Container of current grid state
+     * @param col_index Column index.
+     * @param value     Value to check column with.
+     * @return          bool; if value is able to be placed in column index.
      */
 
     for (int row_index = 0; row_index < N; row_index++)
-        if (grid[row_index][col] == value)
+        if (grid[row_index][col_index] == value)
             return false;
     return true;
 }
 
-bool isValidInBox(int grid[N][N], int rowStartIndex, int colStartIndex, int& value)
+bool isValidInBox(int grid[N][N], int row_start_index, int col_start_index, int& value)
 {
     /**
      * Find if the given value is not found in the 3x3 'box' containing row:col.
      *
-     * @param grid           Container of current grid state
-     * @param rowStartIndex  Start index of row. Take 'rowIndex - (rowIndex % 3)'.
-     * @param colStartIndex  Start index of col. Take 'colIndex - (colIndex % 3)'.
-     * @param value          Value to check column with.
-     * @return if value is able to be placed in the 3x3 'box' that row:col lives in.
+     * @param grid            Container of current grid state
+     * @param row_start_index Start index of row. Take 'row_index - (row_index % 3)'.
+     * @param col_start_index Start index of col. Take 'col_index - (col_index % 3)'.
+     * @param value           Value to check column with.
+     * @return                bool; if value is able to be placed in the 3x3 'box' that row:col lives in.
      */
 
-    for (int rowOffset = 0; rowOffset < 3; rowOffset++)
-        for (int colOffset = 0; colOffset < 3; colOffset++)
-            if (grid[rowStartIndex + rowOffset][colStartIndex + colOffset] == value)
+    for (int row_offset = 0; row_offset < 3; row_offset++)
+        for (int col_offset = 0; col_offset < 3; col_offset++)
+            if (grid[row_start_index + row_offset][col_start_index + col_offset] == value)
                 return false;
 
     return true;
 }
 
-bool isValidValue(int grid[N][N], int& row, int& col, int& value)
+bool isValidValue(int grid[N][N], int& row_index, int& col_index, int& value)
 {
     /**
      * Wrapper function to find if value allowed in the specified location.
      * Valid if value is not found in the column, row or box.
      *
-     * @param grid  Container of current grid state
-     * @param row   Row index.
-     * @param col   Column index.
-     * @param value Value to check column with.
-     * @return if value is allowed at row:col.
+     * @param grid      Container of current grid state
+     * @param row_index Row index.
+     * @param col_index Column index.
+     * @param value     Value to check column with.
+     * @return          bool; if value is allowed at row:col.
      */
 
-    return isValidInRow(grid, row, value) && isValidInCol(grid, col, value) && isValidInBox(grid, row - (row % 3), col - (col % 3), value);
+    return isValidInRow(grid, row_index, value) && 
+           isValidInCol(grid, col_index, value) && 
+           isValidInBox(grid, row_index - (row_index % 3), col_index - (col_index % 3), value);
 }
 
 void printGrid(int grid[N][N])
@@ -82,43 +84,44 @@ void printGrid(int grid[N][N])
      * Pretty print out the grid for a user friendly visual.
      *
      * @param grid Container of current grid state
-     * @return Null
+     * @return     Null
      */
 
-    for (int rowIndex = 0; rowIndex < N; rowIndex++)
+    for (int row_index = 0; row_index < N; row_index++)
     {
-        if (rowIndex != 0 && rowIndex % 3 == 0)
+        if (row_index != 0 && row_index % 3 == 0)
         {
             // width of grid with N digits is (N*2+(4-1))
             // N digits, N spaces, -1 space at end, +4 spaces for block separators
-            cout << string(N * 2 + 3, '-') << endl;
+            cout << string(N * 2 + 3, '-') << '\n';
         }
-        for (int colIndex = 0; colIndex < N; colIndex++)
+        for (int col_index = 0; col_index < N; col_index++)
         {
-            if (colIndex != 0 && colIndex % 3 == 0)
+            if (col_index != 0 && col_index % 3 == 0)
                 cout << "| ";
-            cout << grid[rowIndex][colIndex] << ' ';
+            cout << grid[row_index][col_index] << ' ';
         }
-        cout << endl;
+        cout << '\n';
     }
+    cout << "\n\n";
 }
 
-bool hasUnassigned(int grid[N][N], int& rowIndex, int& colIndex)
+bool hasUnassigned(int grid[N][N], int& row_index, int& col_index)
 {
     /**
      * Function to find the next unassigned location in the grid.
      * A spot is unassigned when its value is 0. This function initializes
      * both the row and column index variables.
      *
-     * @param grid     Container of current grid state.
-     * @param rowIndex Row index.
-     * @param colIndex Column index.
-     * @return         bool; if solution at current state is found.
+     * @param grid      Container of current grid state.
+     * @param row_index Row index.
+     * @param col_index Column index.
+     * @return          bool; if solution at current state is found.
      */
 
-    for (rowIndex = 0; rowIndex < N; rowIndex++) // loop through rows
-        for (colIndex = 0; colIndex < N; colIndex++) // loop through columns
-            if (grid[rowIndex][colIndex] == 0) // check if value is not set
+    for (row_index = 0; row_index < N; row_index++)
+        for (col_index = 0; col_index < N; col_index++)
+            if (grid[row_index][col_index] == 0)
                 return true;
 
     return false;
@@ -128,31 +131,32 @@ bool solve(int grid[N][N])
 {
     /**
      * Main function to find solutions to the given Sudoku grid.
+     * Designed to be a recursive function and backtrack when no valid
+     * values are found for a given Sudoku configuration.
      *
      * @param grid  Container of current grid state.
-     * @return bool; if solution at current state is found.
+     * @return      bool; if solution at current state is found.
      */
 
-    int rowIndex;
-    int colIndex;
-    if (!hasUnassigned(grid, rowIndex, colIndex))
-    {
-        //printGrid(grid);
-        return true;
-    }
-        
+    int row_index;
+    int col_index;
+    if (!hasUnassigned(grid, row_index, col_index))
+        return true; // base case: all spots assigned values, solved! 
 
-    for (int value = 1; value <= N; value++) // loop through possible values
+    for (int value = 1; value <= N; value++)
     {
-        if (isValidValue(grid, rowIndex, colIndex, value))
+        if (isValidValue(grid, row_index, col_index, value))
         {
-            grid[rowIndex][colIndex] = value;
-            //printGrid(grid);
+            grid[row_index][col_index] = value;
+            // recursively call solve to fill in all the unassigned spots
             if (solve(grid))
                 return true;
-            grid[rowIndex][colIndex] = 0;   
+            
+            // backtracking; reset the value and try again with other values
+            grid[row_index][col_index] = 0;   
         }
     }
+    // no valid values were found in this run
     return false;
 }
 
@@ -167,12 +171,21 @@ int main()
                       {5, 0, 0, 0, 0, 0, 0, 7, 3},
                       {0, 0, 2, 0, 1, 0, 0, 0, 0},
                       {0, 0, 0, 0, 4, 0, 0, 0, 9}};
+    // int grid[N][N] = { { 0, 9, 0, 0, 0, 0, 8, 5, 3 },
+    //                     { 0, 0, 0, 8, 0, 0, 0, 0, 4 },
+    //                     { 0, 0, 8, 2, 0, 3, 0, 6, 9 },
+    //                     { 5, 7, 4, 0, 0, 2, 0, 0, 0 },
+    //                     { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    //                     { 0, 0, 0, 9, 0, 0, 6, 3, 7 },
+    //                     { 9, 4, 0, 1, 0, 8, 5, 0, 0 },
+    //                     { 7, 0, 0, 0, 0, 6, 0, 0, 0 },
+    //                     { 6, 8, 2, 0, 0, 0, 0, 9, 0 } };
     printGrid(grid);
-    cout << "Solving..." << endl;
+    cout << "Solving...\n\n";
     if (solve(grid))
         printGrid(grid);
     else
-        cout << "No solution found!" << endl;
+        cout << "No solution found!\n\n";
 
     return 0;
 }
