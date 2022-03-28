@@ -93,8 +93,13 @@ void printGrid(int grid[N][N])
         for (int col_index = 0; col_index < N; col_index++)
         {
             if (col_index != 0 && col_index % 3 == 0)
-                cout << "| ";
-            cout << grid[row_index][col_index] << ' ';
+                cout << '|' << SPACE;
+    
+            // substite 0 for a blank space
+            if (grid[row_index][col_index] == 0)
+                cout << SPACE << SPACE;
+            else
+                cout << grid[row_index][col_index] << SPACE;
         }
         cout << '\n';
     }
@@ -157,7 +162,7 @@ bool solve(int grid[N][N])
 
 int main()
 {
-    SudokuGenerator generator(55);
+    SudokuGenerator generator(70);
     printGrid(generator.grid);
     cout << "Solving...\n\n";
     if (solve(generator.grid))

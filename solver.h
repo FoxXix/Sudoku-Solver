@@ -8,6 +8,7 @@
 using namespace std;
 
 const int N {9};
+const char SPACE {' '};
 
 bool isValidInRow(int grid[N][N], int& row_index, int& value);
 bool isValidInCol(int grid[N][N], int& col_index, int& value);
