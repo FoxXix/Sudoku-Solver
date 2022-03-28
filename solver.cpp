@@ -1,10 +1,5 @@
-#include <iostream>
-#include <cstdio>
-#include <cstring>
-#include <cstdlib>
-using namespace std;
-
-const int N {9};
+#include "solver.h"
+#include "generator.h"
 
 bool isValidInRow(int grid[N][N], int& row_index, int& value)
 {
@@ -110,13 +105,13 @@ bool hasUnassigned(int grid[N][N], int& row_index, int& col_index)
 {
     /**
      * Function to find the next unassigned location in the grid.
-     * A spot is unassigned when its value is 0. This function initializes
-     * both the row and column index variables.
+     * A spot is unassigned when its value is 0. The row and column variables will 
+     * be set with the row and column index that has the unassigned value, if found.
      *
      * @param grid      Container of current grid state.
      * @param row_index Row index.
      * @param col_index Column index.
-     * @return          bool; if solution at current state is found.
+     * @return          bool; if the grid has an unassigned spot.
      */
 
     for (row_index = 0; row_index < N; row_index++)
@@ -162,28 +157,11 @@ bool solve(int grid[N][N])
 
 int main()
 {
-    int grid[N][N] = {{0, 0, 0, 0, 0, 0, 0, 0, 0},
-                      {0, 0, 0, 0, 0, 3, 0, 8, 5},
-                      {0, 0, 1, 0, 2, 0, 0, 0, 0},
-                      {0, 0, 0, 5, 0, 7, 0, 0, 0},
-                      {0, 0, 4, 0, 0, 0, 1, 0, 0},
-                      {0, 9, 0, 0, 0, 0, 0, 0, 0},
-                      {5, 0, 0, 0, 0, 0, 0, 7, 3},
-                      {0, 0, 2, 0, 1, 0, 0, 0, 0},
-                      {0, 0, 0, 0, 4, 0, 0, 0, 9}};
-    // int grid[N][N] = { { 0, 9, 0, 0, 0, 0, 8, 5, 3 },
-    //                     { 0, 0, 0, 8, 0, 0, 0, 0, 4 },
-    //                     { 0, 0, 8, 2, 0, 3, 0, 6, 9 },
-    //                     { 5, 7, 4, 0, 0, 2, 0, 0, 0 },
-    //                     { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    //                     { 0, 0, 0, 9, 0, 0, 6, 3, 7 },
-    //                     { 9, 4, 0, 1, 0, 8, 5, 0, 0 },
-    //                     { 7, 0, 0, 0, 0, 6, 0, 0, 0 },
-    //                     { 6, 8, 2, 0, 0, 0, 0, 9, 0 } };
-    printGrid(grid);
+    SudokuGenerator generator(55);
+    printGrid(generator.grid);
     cout << "Solving...\n\n";
-    if (solve(grid))
-        printGrid(grid);
+    if (solve(generator.grid))
+        printGrid(generator.grid);
     else
         cout << "No solution found!\n\n";
 
