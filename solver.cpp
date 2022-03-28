@@ -1,7 +1,7 @@
 #include "solver.h"
 #include "generator.h"
 
-bool isValidInRow(int grid[N][N], int& row_index, int& value)
+bool isValidInRow(int grid[N][N], int &row_index, int &value)
 {
     /**
      * Find if the given value at the specified row is not found.
@@ -18,7 +18,7 @@ bool isValidInRow(int grid[N][N], int& row_index, int& value)
     return true;
 }
 
-bool isValidInCol(int grid[N][N], int& col_index, int& value)
+bool isValidInCol(int grid[N][N], int &col_index, int &value)
 {
     /**
      * Find if the given value at the specified column is not found.
@@ -35,7 +35,7 @@ bool isValidInCol(int grid[N][N], int& col_index, int& value)
     return true;
 }
 
-bool isValidInBox(int grid[N][N], int row_start_index, int col_start_index, int& value)
+bool isValidInBox(int grid[N][N], int row_start_index, int col_start_index, int &value)
 {
     /**
      * Find if the given value is not found in the 3x3 'box' containing row:col.
@@ -55,7 +55,7 @@ bool isValidInBox(int grid[N][N], int row_start_index, int col_start_index, int&
     return true;
 }
 
-bool isValidValue(int grid[N][N], int& row_index, int& col_index, int& value)
+bool isValidValue(int grid[N][N], int &row_index, int &col_index, int &value)
 {
     /**
      * Wrapper function to find if value allowed in the specified location.
@@ -68,8 +68,8 @@ bool isValidValue(int grid[N][N], int& row_index, int& col_index, int& value)
      * @return          bool; if value is allowed at row:col.
      */
 
-    return isValidInRow(grid, row_index, value) && 
-           isValidInCol(grid, col_index, value) && 
+    return isValidInRow(grid, row_index, value) &&
+           isValidInCol(grid, col_index, value) &&
            isValidInBox(grid, row_index - (row_index % 3), col_index - (col_index % 3), value);
 }
 
@@ -94,7 +94,7 @@ void printGrid(int grid[N][N])
         {
             if (col_index != 0 && col_index % 3 == 0)
                 cout << '|' << SPACE;
-    
+
             // substite 0 for a blank space
             if (grid[row_index][col_index] == 0)
                 cout << SPACE << SPACE;
@@ -106,11 +106,11 @@ void printGrid(int grid[N][N])
     cout << "\n\n";
 }
 
-bool hasUnassigned(int grid[N][N], int& row_index, int& col_index)
+bool hasUnassigned(int grid[N][N], int &row_index, int &col_index)
 {
     /**
      * Function to find the next unassigned location in the grid.
-     * A spot is unassigned when its value is 0. The row and column variables will 
+     * A spot is unassigned when its value is 0. The row and column variables will
      * be set with the row and column index that has the unassigned value, if found.
      *
      * @param grid      Container of current grid state.
@@ -141,7 +141,7 @@ bool solve(int grid[N][N])
     int row_index;
     int col_index;
     if (!hasUnassigned(grid, row_index, col_index))
-        return true; // base case: all spots assigned values, solved! 
+        return true; // base case: all spots assigned values, solved!
 
     for (int value = 1; value <= N; value++)
     {
@@ -151,9 +151,9 @@ bool solve(int grid[N][N])
             // recursively call solve to fill in all the unassigned spots
             if (solve(grid))
                 return true;
-            
+
             // backtracking; reset the value and try again with other values
-            grid[row_index][col_index] = 0;   
+            grid[row_index][col_index] = 0;
         }
     }
     // no valid values were found in this run
